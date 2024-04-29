@@ -486,52 +486,27 @@ do
  ;;
  esac
 done
+echo
+while true
+do
+ echo "Vuoi installare dei pacchetti aggiuntivi?"
+ read -r -p "Di default non sono presenti (Enter Y/n)? " pkgyorno
 
-# while true
-# do
-#  read -r -p "Do you want install additional packages? (Enter Y/n)? " packyesorno
-# 
-#  case $packyesorno in
-#      [yY][eE][sS]|[yY])
-#  echo
-#  PACKALLOW=y
-#  printf %s "Write the packages you want: "
-#  read -r packsel
-#  break
-#  ;;
-#      [nN][oO]|[nN])
-#  PACKALLOW=n
-#  echo
-#  break
-#         ;;
-#      *)
-#  echo "Invalid input, please enter Y/N or yes/no"
-#  ;;
-#  esac
-# done
-# echo
+ case $pkgyorno in
+     [yY][eE][sS]|[yY])
+ echo
+ read -p "Scrivi i pacchetti che vuoi installare sulla vm $VMID (separa i vari pacchetti con uno spazio): " pkg
+ break
+ ;;
+     [nN][oO]|[nN])
 
-
-#while true
-#do
-# read -r -p "Do you want the VM to autostart after you create it here? (Enter Y/n)? " AUTOSTARTS
-#
-# case $AUTOSTARTS in
-#     [yY][eE][sS]|[yY])
-# echo
-# AUTOSTART=yes
-# break
-# ;;
-#     [nN][oO]|[nN])
-#AUTOSTART=no
-# echo
-# break
-#        ;;
-#     *)
-# echo "Invalid input, please enter Y/N or yes/no"
-# ;;
-# esac
-#done
+ break
+        ;;
+     *)
+ echo "Invalid input, please enter Y/n or Yes/no"
+ ;;
+ esac
+done
 
 echo
 # This block of code is for picking which node to have the VM on.
@@ -546,7 +521,6 @@ echo "   BUT "
 echo "   It will start on the proxmox node you are on and then it will use "
 echo "   qm migrate to the target node (JUST FYI) "
 echo
-
 
 if [ -f "/etc/pve/corosync.conf" ];
 then
@@ -722,10 +696,7 @@ echo "users:" >> $snippetstorage$VMID.yaml
 echo "  - default" >> $snippetstorage$VMID.yaml
 echo "package_upgrade: true" >> $snippetstorage$VMID.yaml
 echo "packages:" >> $snippetstorage$VMID.yaml
-# if [[ $PACKALLOW =~ ^[Yy]$ || $PACKALLOW =~ ^[yY][eE][sS] ]]
-# then
-#     echo " - $packsel" >> $snippetstorage$VMID.yaml
-# fi
+    echo " - $pkg" >> $snippetstorage$VMID.yaml
 if [[ $QEMUGUESTAGENT =~ ^[Yy]$ || $QEMUGUESTAGENT =~ ^[yY][eE][sS] ]]
 then
     echo " - qemu-guest-agent" >> $snippetstorage$VMID.yaml
